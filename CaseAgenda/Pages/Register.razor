@@ -1,0 +1,60 @@
+﻿@page "/register"
+@using CaseAgenda.Authentication
+@inject UserAccountService userAccountService
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+<EditForm Model="@acc" OnValidSubmit="@RegisterUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <div class="mb-3 text-center">
+            <h3>REGISTER</h3>
+        </div>
+        <div class="mb-3">
+            <label>Username</label>
+            <input @bind-value="acc.Username" class="form-control" placeholder="Username" />
+                <ValidationMessage For="@(() => acc.Username)" />
+        </div>
+        <div class="mb-3">
+            <label>E-mail</label>
+            <input @bind-value="acc.Email" class="form-control" placeholder="E-mail" />
+                <ValidationMessage For="@(() => acc.Email)" />
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input @bind-value="acc.Password" type="password" class="form-control" placeholder="Password" />
+                <ValidationMessage For="@(() => acc.Password)" />
+        </div>
+        <div class="mb-3">
+            <label>Role</label>
+            <select @bind="selectedRole">
+                @foreach (var item in dropdownItems)
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3 d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </div>
+</div>
+</EditForm>
+
+@code {
+    private string selectedRole = "user";
+    private string[] dropdownItems = { "user", "admin" };
+    private UserAccount acc = new UserAccount();
+
+    private void RegisterUser()
+    {
+        acc.Role = selectedRole;
+        userAccountService.ReigsterUser(acc);
+
+        navManager.NavigateTo("/registration-successful", true);
+    }
+}

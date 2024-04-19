@@ -1,0 +1,52 @@
+﻿@page "/login"
+@using CaseAgenda.Authentication
+@inject UserAccountService userAccountService
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+
+<EditForm Model="@acc" OnValidSubmit="@Authenticate">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <div class="mb-3 text-center">
+            <h3>LOGIN</h3>
+        </div>
+        <div class="mb-3">
+            <label>User Name</label>
+            <input @bind-value="acc.Username" class="form-control" placeholder="User Name" />
+                <ValidationMessage For="@(() => acc.Username)" />
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input @bind-value="acc.Password" type="password" class="form-control" placeholder="Password" />
+                <ValidationMessage For="@(() => acc.Password)" />
+        </div>
+        <div class="mb-3 d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </div>
+</div>
+</EditForm>
+
+@code {
+
+    private UserLogin acc = new UserLogin();
+
+    private async Task Authenticate()
+    {
+        var userAccount = await userAccountService.GetByUserName(acc);
+
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+            {
+                UserName = userAccount.Username,
+                Role = userAccount.Role
+
+            });
+        navManager.NavigateTo("/", true);
+    }
+
+}

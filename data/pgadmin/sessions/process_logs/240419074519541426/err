@@ -1,0 +1,20 @@
+240419074519880222,pg_restore: connecting to database for restore
+
+240419074519886562,pg_restore: creating TABLE "public.userbase"
+
+240419074519897399,pg_restore: creating SEQUENCE "public.userbase_id_seq"
+
+240419074519901442,pg_restore: creating SEQUENCE OWNED BY "public.userbase_id_seq"
+
+240419074519905400,pg_restore: creating DEFAULT "public.userbase id"
+
+240419074519909051,pg_restore: processing data for table "public.userbase"
+
+240419074519913414,pg_restore: executing SEQUENCE SET userbase_id_seq
+
+240419074519917467,pg_restore: creating CONSTRAINT "public.userbase userbase_email_key"
+
+240419074519921413,pg_restore: creating CONSTRAINT "public.userbase userbase_pkey"
+
+240419074519926410,pg_restore: creating CONSTRAINT "public.userbase userbase_username_key"
+

@@ -1,0 +1,62 @@
+name: dockercompose14488971117285126346
+services:
+  caseagenda:
+    build:
+      context: C:\Projects\CaseAgenda\CaseAgenda
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: caseagenda
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 80
+        protocol: tcp
+  caseagenda.database:
+    container_name: caseagenda.database
+    environment:
+      POSTGRES_DB: usecase
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Projects\CaseAgenda\postgres\restore\casagenda.sql
+        target: /docker-entrypoint-initdb.d/casagenda.sql
+        bind:
+          create_host_path: true
+  pgadmin_case:
+    container_name: pgadmin_case
+    depends_on:
+      caseagenda.database:
+        condition: service_started
+        required: true
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    image: dpage/pgadmin4:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "8080"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: bind
+        source: C:\Projects\CaseAgenda\data\pgadmin
+        target: /var/lib/pgadmin
+        bind:
+          create_host_path: true
+networks:
+  default:
+    name: dockercompose14488971117285126346_default

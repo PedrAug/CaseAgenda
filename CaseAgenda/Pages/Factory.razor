@@ -1,0 +1,40 @@
+﻿@page "/factory"
+@attribute [Authorize(Roles = "admin, user")]
+@using CaseAgenda.Factory
+@using CaseAgenda.Store
+@using CaseAgenda.Enum
+@inject AlarmFactory alarmFactory
+
+
+<PageTitle>Factory</PageTitle>
+
+<h1>Factory</h1>
+
+<div>
+    @foreach (var alarm in Alarms)
+    {
+        <div>@alarm.alarmType.ToString()</div>
+    }
+</div>
+
+
+<button class="btn btn-primary" @onclick="MorningAlarm">Morning Alarm</button>
+
+
+<button class="btn btn-primary" @onclick="LateNightAlarm">Late Night Alarm</button>
+
+@code {
+    private List<IAlarm> Alarms = new List<IAlarm>();
+
+    private void MorningAlarm()
+    {
+        var alarm = alarmFactory.CreateAlarm(AlarmType.Morning);
+        Alarms.Add(alarm);
+    }
+
+    private void LateNightAlarm()
+    {
+        var alarm = alarmFactory.CreateAlarm(AlarmType.LateNight);
+        Alarms.Add(alarm);
+    }
+}

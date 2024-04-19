@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  caseagenda:
+    image: ${DOCKER_REGISTRY-}caseagenda
+    build:
+      context: CaseAgenda
+      dockerfile: Dockerfile
+  caseagenda.database:
+    image: postgres:latest
+    container_name: caseagenda.database
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres/restore/caseagenda.sql:/docker-entrypoint-initdb.d/caseagenda.sql
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=usecase
+  pgadmin_case:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_case
+    restart: always
+    depends_on:
+      - caseagenda.database
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - 8080:80
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin

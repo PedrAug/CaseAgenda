@@ -1,0 +1,18 @@
+﻿@page "/singleton"
+@using CaseAgenda.Singleton
+@inject SingletonManager singletonManager
+
+<h3>Singleton Manager</h3>
+
+<p>Counter: @singletonManager.GetCounter()</p>
+
+
+<button class="btn btn-primary" @onclick="IncrementCounter">Add</button>
+
+@code {
+    private void IncrementCounter()
+    {
+        singletonManager.IncrementCounter();
+        StateHasChanged();
+    }
+}

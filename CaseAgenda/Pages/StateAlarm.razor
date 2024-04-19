@@ -1,0 +1,39 @@
+﻿@page "/observable"
+@using CaseAgenda.Store
+@using CaseAgenda.Enum
+@inject AlarmStore alarmStore
+
+<PageTitle>Observable</PageTitle>
+
+<h1>State</h1>
+
+<p role="status">Alarm: @alarmStore.GetState().Alarm.ToString()</p>
+
+
+<button class="btn btn-primary" @onclick="MorningAlarm">Morning Alarm</button>
+
+
+<button class="btn btn-primary" @onclick="LateNightAlarm">Late Night Alarm</button>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        alarmStore.AddStateChangeListeners(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    private void MorningAlarm()
+    {
+        alarmStore.MorningAlarm();
+    }
+
+    private void LateNightAlarm()
+    {
+        alarmStore.LateNightAlarm();
+    }
+
+}
